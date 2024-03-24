@@ -1,38 +1,39 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
-async function query(data) {
-	const response = await fetch(
-		"https://api-inference.huggingface.co/models/facebook/bart-large-cnn", // make sure the model ID is correct
-		{
-			headers: {
-				Authorization: `Bearer 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`,
-			}, // use your actual API token
-			method: "POST",
-			body: JSON.stringify(data),
-		}
-	);
-	const result = await response.json();
-	return result;
-}
-
-function NoteSummarize() {
+function NoteSummarize({ transcription }) {
 	const [text, setText] = useState("");
 	const [summary, setSummary] = useState("");
+	const [transcriptionText, setTranscriptionText] = useState({
+		transcription,
+	});
+	useEffect(() => {
+		console.log("transcription updated: ", transcriptionText);
+		setTranscriptionText({ transcription });
+		// const fetchData = async () => {
+		// 	try {
+		// 		const response = await fetch("api/summarize", {
+		// 			method: "POST",
+		// 			body: JSON.stringify({ transcription }),
+		// 		});
 
-	const getSummary = async () => {
-		const data = { inputs: text };
-		const result = await query(data);
-
-		// The actual property name in the result depends on the API's response structure.
-		// For many Hugging Face models, the result could be in the 'generated_text' field.
-		// Check the response structure and use the correct property.
-		setSummary(result.generated_text || "No summary available");
-	};
-
+		// 		if (!response.ok) {
+		// 			console.log("response error:", response.statusText);
+		// 		}
+		// 		const responseJson = response.json();
+		// 		console.log("response: ", responseJson);
+		// 		setSummary(responseJson);
+		// 	} catch (error) {
+		// 		console.log("errorMESSAGE:", error.message);
+		// 	}
+		// };
+		// fetchData();
+		// console.log("pulling from hf");
+	}, [transcription]);
 	return (
-		<div>
-			<textarea
+		<div className="textScreen">
+			{summary}
+			{/* <textarea
 				value={text}
 				onChange={(e) => setText(e.target.value)}
 				placeholder="Enter text to summarize"
@@ -45,7 +46,7 @@ function NoteSummarize() {
 					readOnly
 					placeholder="Summary will appear here"
 				/>
-			</div>
+			</div> */}
 		</div>
 	);
 }
