@@ -2,7 +2,7 @@
 import fetch from "node-fetch";
 
 export default async function handler(req, res) {
-	data = req.body;
+	let data = JSON.stringify(req.body);
 	const API_URL =
 		"https://api-inference.huggingface.co/models/facebook/bart-large-cnn";
 	const API_KEY = {
